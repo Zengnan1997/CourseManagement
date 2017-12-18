@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>课程内老师首页</title>
+	<link rel="stylesheet" type="text/css" href="../css/teacher/TeacherCourseInformation.css">
+	
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	 
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>	
+	
+	<script>
+		$(document).ready(function(){
+			var courseId = localStorage.getItem("courseId");
+            courseId=1;
+
+			//左边的课程名称和简介
+			$.ajax({
+                type: "GET",
+				url: "/course/"+courseId,
+                dataType: "json",
+				success: function (data) {
+					//$(".courseName").text(data.name);
+					$(".courseName").text("OOAD");
+					//$(".courseIntroduction").text(data.description);
+					$(".courseIntroduction").text("OOAD（Object Oriented Analysis Desi");
+				}
+			});
+			
+			//班级名称列表
+			$.ajax({
+				url:"/course/"+courseId+"/class",
+				type: "GET",
+				success: function (data) {
+					if(data.length != 0)
+					{
+						for(var i=0;i<data.length; i++)
+						{
+							var parent=$("<a></a>");
+							parent.addClass("block");
+							
+							var child=$("<div></div>");
+							child.addClass("blockFont")
+							child.attr("id",data[i].id);
+							child.text(data[i].name);
+							child.text("周三一二节");
+							child.appendTo(parent);
+							parent.prependTo($("#class").children("div.blockBody"));
+						}
+					}
+				}
+			});
+			
+			
+			//讨论课名称列表
+			$.ajax({
+				url:"/course/"+courseId+"/seminar",
+				type: "GET",
+				success: function (data) {
+					if(data.length != 0)
+					{
+						for(var i=0;i<data.length; i++)
+						{
+							var parent=$("<a></a>");
+							parent.addClass("block");
+							
+							var child=$("<div></div>");
+							child.addClass("blockFont");
+							child.attr("id","data[i].id");
+							child.text(data[i].name);
+							//$child.attr("id","34");
+							//$child.text("zho");
+							child.appendTo(parent);
+							parent.prependTo($("#seminar").children("div.blockBody"));
+						}
+					}
+				}
+			});
+			
+			//添加班级按钮
+			$("#addClass").click(function(){
+			    window.confirm("请确认");
+				buttonId=this.id;
+				window.location.href='teacher.html?data=' + buttonId;
+			});
+			
+			//添加讨论课按钮
+			$("#addSeminar").click(function(){
+				buttonId=this.id;
+				window.location.href='teacher.html?data=' + buttonId;
+			});
+			
+			//主页按钮
+			$("#home").click(function(){
+				window.location.href = 'WechatLoginPage.html';
+			});
+			
+			//帮助按钮
+			$("#help").click(function(){
+				window.location.href = 'WechatLoginPage.html';
+			});
+			
+			//退出按钮
+			$("#exit").click(function(){
+				window.location.href = 'WechatLoginPage.html';
+			});
+			
+			//返回上一页按钮
+			$(".returnButton").click(function(){
+				if(this.parentNode.parentNode.id == 'teacherHome'){
+					window.location.href="teacherHomePage.html";
+				}
+			});
+			
+			//点击班级或者讨论课查看信息
+			$(document).on('click',".blockFont",function(){
+				var typeId = $(this).attr("id");
+				localStorage.setItem("typeId",typeId);
+				var $para = $(this.parentNode.parentNode.parentNode).attr("id");
+				window.location.href='teacher.html?data=' + $para;
+			});
+		});
+		
+		
+	</script>
+</head>
+<body>
+    <div style="width: 100%; height: 100%;">
+        <div class="top">
+        	<div class="font">
+        		课堂管理系统
+        	</div>
+        	<div class="icon">
+        		<img src="../image/home.png"><label id="home">首页</label>
+        		<img src="../image/help.png"><label id="help">帮助</label>
+        		<img src="../image/exit.png"><label id="exit">退出</label>
+        	</div>
+        	<div class="clear"></div>
+    	</div>
+        <div class="body">
+            <div class="navigation">
+                <div class="courseName"></div>
+                <div class="line"></div>
+                <div class="courseIntroduction"></div>
+            </div>
+           <!-- 老师课程内页首页 -->
+            <div id="teacherHome" class="content">
+                <div id="class" class="classInfo">
+                    <div class="title">课程班级</div>
+					<div class="returnButton">返回上一页</div>
+                    <div class="line"></div>
+                    <div class="blockBody">
+						<div class="block"><img src="../image/smalladd.png" id="addClass" class="addImg"/></div>
+                    </div>
+                </div>
+                <div id="seminar" class="seminarInfo">
+                    <div class="title">讨论课</div>
+                    <div class="line"></div>
+                    <div class="blockBody">
+						<div class="block"><img src="../image/smalladd.png" id="addSeminar" class="addImg"/></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+
+</body>
+</html>

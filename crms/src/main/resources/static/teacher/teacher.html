@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>课程内老师首页</title>
+	<link rel="stylesheet" type="text/css" href="../css/teacher/content.css">
+	
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+	<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+	<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+	 
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	
+	<style>
+			
+	.file{
+        width: 100%;
+        height: 100%;
+		border-style:solid;
+		border-width:1%;
+		border-color:black;
+      }
+	  
+	  .pdfFile{
+	  font-family:YouYuan;
+	  padding-left:5%;
+	  }
+	  
+	 .item1{
+        width: 40%;
+        height: 5%;
+		margin-left:5%;
+      }
+	  
+	 .item2{
+        width: 40%;
+        height: 5%;
+		margin-left:85%;
+      }
+	  
+	
+	</style>
+	
+	<script>
+		$(function(){
+            var courseId = localStorage.getItem("courseId");
+            courseId = 1;
+            $.ajax({
+                type:"GET",
+                url:"/course/"+courseId,
+                dataType:"json",
+                success:function (data) {
+                    $(".courseName").text(data.name);
+                    //$(".courseName").text("OOAD");
+                    $(".courseIntroduction").text(data.description);
+                    //$(".courseIntroduction").text("OOAD（Object Oriented Analysis Desi");
+                }
+            });
+
+			$("#createClassPage").hide();
+			$("#checkClassPage").hide();
+			$("#modifyClassPage").hide();
+			$("#createSeminarPage").hide();
+			$("#modifySeminarPage").hide();
+			$("#newSeminarPage").hide();
+			$("#giveScorePage").hide();
+			$("#createTopicPage").hide();
+			$("#checkTopicBeforeClassPage").hide();
+			$("#checkTopicAfterClassPage").hide();
+			$("#modifyTopicPage").hide();
+			$("#viewReportPage").hide();
+			
+			
+			
+			//对老师主页传过来的数据进行判断
+			function getUrlParam(name) {
+					//构造一个含有目标参数的正则表达式对象
+					var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+					//匹配目标参数 
+					var r = window.location.search.substr(1).match(reg);  
+					//返回参数值
+					if (r != null) return unescape(r[2]); return null;
+				}
+				
+			var urlData = getUrlParam('data');
+			
+
+			
+			//创建班级
+			if(urlData == 'addClass'){
+				$("#createClassPage").show();
+				
+			}
+			
+			//创建讨论课
+			else if(urlData =='addSeminar'){
+				$("#createSeminarPage").show();
+				
+			}
+			
+			//查看班级信息
+			else if(urlData == 'class'){
+                var classId = localStorage.getItem("classId");
+                classId = 1;
+                $.ajax({
+                    type: "GET",
+                    url:"/class/"+classId,
+                    dataType: "json",
+                    success: function (data) {
+
+                        $("#checkClassPage").find("label.itemName").eq(1).text(data.name);
+                        $("#checkClassPage").find("label.itemName").eq(3).text(data.site);
+                        $("#checkClassPage").find("label.itemName").eq(5).text(data.time);
+                        $("#checkClassPage").find("label.itemName").eq(9).text(data.proportions.presentation);
+                        $("#checkClassPage").find("label.itemName").eq(11).text(data.proportions.report);
+                        $("#checkClassPage").find("label.itemName").eq(12).text(data.proportions.a);
+                        $("#checkClassPage").find("label.itemName").eq(13).text(data.proportions.b);
+                        $("#checkClassPage").find("label.itemName").eq(14).text(data.proportions.c);
+                        /*
+                        $("#checkClassPage").find("label.itemName").eq(1).text("周三3-4节");
+                        $("#checkClassPage").find("label.itemName").eq(3).text("海韵201");
+                        $("#checkClassPage").find("label.itemName").eq(5).text("单周周一12节");
+                        $("#checkClassPage").find("label.itemName").eq(9).text("60%");
+                        $("#checkClassPage").find("label.itemName").eq(11).text("40%");
+                        $("#checkClassPage").find("label.itemName").eq(12).text("30%");
+                        $("#checkClassPage").find("label.itemName").eq(13).text("40%");
+                        $("#checkClassPage").find("label.itemName").eq(14).text("30%");
+                        */
+                    }
+                });
+				$("#checkClassPage").show();
+			}
+			
+			//查看讨论课信息
+			else if(urlData == 'seminar'){
+                var seminarId = localStorage.getItem("seminarId");
+                seminarId = 1;
+                $.ajax({
+                    type: "GET",
+                    url:"/seminar/"+seminarId,
+                    dataType: "json",
+                    success: function (data) {
+
+                        $("#newSeminarPage").find("#seminarTitle").text(data.name);
+                        $("#newSeminarPage").find("label.itemName").eq(1).text(data.name);
+                        $("#newSeminarPage").find("label.itemName").eq(3).text(data.description);
+                        $("#newSeminarPage").find("label.itemName").eq(5).text(data.groupingMethod == "fixed" ? "固定分组" : "随机分组");
+                        $("#newSeminarPage").find("label.itemName").eq(7).text(data.startTime);
+                        $("#newSeminarPage").find("label.itemName").eq(9).text(data.endTime);
+
+                        /*if (data.topics.length != undefined) {
+                            var i = 0;
+                            for (i = 0; i < data.topics.length; i++) {
+                                var parent=$("<a></a>");
+                                parent.addClass("topicBlock");
+                                var child=$("<div></div>");
+                                child.addClass("topicBlockFont");
+                                child.text("TopicC");
+                                child.appendTo($parent);
+                                parent.prependTo($("#topic").children("div.topicBlockBody"));
+                            }*/
+                            var parent2=$("<a></a>");
+                            parent2.addClass("topicBlock");
+
+                            var child2=$("<div></div>");
+                            child2.addClass("topicBlockFont");
+                            child2.text('TopicB');
+                            child2.appendTo(parent2);
+                            parent2.prependTo($("#topic").children("div.topicBlockBody"));
+
+                            var parent2=$("<a></a>");
+                            parent2.addClass("topicBlock");
+
+                            var child2=$("<div></div>");
+                            child2.addClass("topicBlockFont");
+                            child2.text('TopicA');
+                            child2.appendTo(parent2);
+                            parent2.prependTo($("#topic").children("div.topicBlockBody"));
+
+                       // }
+
+                        /*
+                        $("#newSeminarPage").find("#seminarTitle").text("讨论课1");
+                        $("#newSeminarPage").find("label.itemName").eq(1).text("讨论课1");
+                        $("#newSeminarPage").find("label.itemName").eq(3).text("领域模型");
+                        $("#newSeminarPage").find("label.itemName").eq(5).text("固定分组");
+                        $("#newSeminarPage").find("label.itemName").eq(7).text("11/10/2017");
+                        $("#newSeminarPage").find("label.itemName").eq(9).text("17/10/2017");
+
+                        var	 $parentDiv=new Array(2);
+                        var $childDiv=new Array(2);
+
+                        for(var i=0;i<2;i++)
+                        {
+                            $parentDiv[i]=$("<a></a>");
+                            $parentDiv[i].addClass("topicBlock");
+                            $childDiv[i]=$("<div>TopicA</div>");
+                            $childDiv[i].addClass("topicBlockFont");
+                            $childDiv[i].appendTo($parentDiv[i]);
+                            $parentDiv[i].prependTo($("#topic").children("div.topicBlockBody"));
+                        }
+                        */
+                    }
+                });
+				$("#newSeminarPage").show();
+			}
+
+			//在创建topic页面点击提交按钮，返回老师主页
+			$("#submitNewTopic").click(function(){
+				var seminarId = localStorage.getItem("seminarId");
+				$(".submit").click(function () {
+					/*var topicInfo = {
+						serial: $("#createTopicPage").find("input.middleInput").eq(0).val(),
+						name: $("#createTopicPage").find("input.bigInput").eq(0).val(),
+						description: $("#createTopicPage").find("#topicArea").val(),
+						groupLimit: $("#createTopicPage").find("input.middleInput").eq(1).val(),
+						groupMemberLimit:$("#createTopicPage").find("input.middleInput").eq(2).val()
+					}
+					
+					$.ajax({
+						url:"/seminar/" + seminarId + "/topic",
+						type:"POST",
+                        dataType: "json",
+						success:function () {
+							confirm("是否确认提交？");
+							$("#createTopicPage").hide();
+							$("#newSeminarPage").show();
+						}
+					});*/
+                    var r=confirm("是否确认提交？");
+                    if(r){
+                        $("#createTopicPage").hide();
+                        $("#newSeminarPage").show();
+					}
+
+				});
+			});
+
+			//返回主页
+			$("#home").click(function(){
+				window.location.href = 'WechatLoginPage.html';
+			});
+			
+			//帮助页面
+			$("#help").click(function(){
+				window.location.href = 'WechatLoginPage.html';
+			});
+			
+			//退出
+			$("#exit").click(function(){
+				window.location.href = 'WechatLoginPage.html';
+			});
+			
+
+			//在创建班级页面点击提交按钮，跳转到老师课程内首页
+			$("#submitNewClass").click(function(data){
+			    /*
+				var classTime = $("#createClassPage").find("#week option:selected").text() + $("#createClassPage").find("#day option:selected").text() + $("#createClassPage").find("#time option:selected").text();
+				var classInfo = {
+						name: $("#createClassPage").find("input.bigInput").eq(0).val(),
+						site: $("#createClassPage").find("input.bigInput").eq(1).val(),
+						time: classTime,
+						proportions: {
+							presentation: $("#createClassPage").find("input.smallInput").eq(0).val(),
+							report: $("#createClassPage").find("input.smallInput").eq(1).val(),
+							c: $("#createClassPage").find("input.smallInput").eq(2).val(),
+							b: $("#createClassPage").find("input.smallInput").eq(3).val(),
+							a: $("#createClassPage").find("input.smallInput").eq(4).val(),
+						}
+				};
+
+				$.ajax({
+						url: "/course/" + courseId + "/class",
+						type: "POST",
+						data: json,
+						success: function (data) {
+							alert("班级创建成功!");
+							window.location.href="teacherCourseHomePage.html";
+						}
+				});
+				*/
+			    var r=confirm("是否确认提交？");
+			    if(r){
+                    buttonId=this.id;
+                    window.location.href='teacherCourseHomePage.html?' + buttonId;
+				}
+
+			});
+			
+			//在创建班级页面点击重置按钮，清空所有输入框继续显示创建班级页面
+			$("#resetNewClass").click(function(){
+				$("input[type='text']").val("");
+			});
+			
+			
+			//在查看班级页面点击修改按钮，显示修改班级信息页面
+			$("#modifyClass").click(function(){
+				$("#checkClassPage").hide();
+                $("#modifyClassPage").show();
+                /*
+				var classJson = JSON.parse(localStorage.getItem("classJson"));
+				$("#modifyClassPage").find("input.bigInput").eq(0).val(classJson.name);
+				$("#modifyClassPage").find("input.bigInput").eq(1).val(classJson.site);
+				$("#modifyClassPage").find("input.smallInput").eq(0).val(classJson.proportions.presentation);
+				$("#modifyClassPage").find("input.smallInput").eq(1).val(classJson.proportions.report);
+				$("#modifyClassPage").find("input.smallInput").eq(2).val(classJson.proportions.a);
+				$("#modifyClassPage").find("input.smallInput").eq(3).val(classJson.proportions.b);
+				$("#modifyClassPage").find("input.smallInput").eq(4).val(classJson.proportions.c);
+				*/
+
+			});
+			
+			//在查看班级页面点击删除班级按钮，显示老师课程内页主页
+			$("#deleteClass").click(function(){
+			    /*
+				$.ajax({
+						url: "/course/" + courseId,
+						type: "DELETE",
+						data: json,
+						success: function (data) {
+							alert("班级删除成功!");
+							window.location.href="teacherCourseHomePage.html";
+						}
+				});*/
+                var r=confirm("是否确认删除？");
+                if(r){
+                    window.location.href="teacherCourseHomePage.html";
+				}
+
+			});
+			
+			//在修改班级页面点击提交按钮，显示班级信息页面
+			$("#submitModifyClass").click(function(){
+                var r=confirm("是否确认提交？");
+                if(r){
+                    $("#modifyClassPage").hide();
+                    $("#checkClassPage").show();
+				}
+
+			    /*
+				var classTime = $("#createClassPage").find("#week option:selected").text() + $("#createClassPage").find("#day option:selected").text() + $("#createClassPage").find("#time option:selected").text();
+				var classInfo = {
+						name: $("#createClassPage").find("input[name=className]").val(),
+						site: $("#createClassPage").find("input[name=classSite]").val(),
+						time: classTime,
+						proportions: {
+							presentation: $("#createClassPage").find("input[name=seminarGrade]").val(),
+							report: $("#createClassPage").find("input[name=reportGrade]").val(),
+							c: $("input[name=a]").val(),
+							b: $("input[name=b]").val(),
+							a: $("input[name=c]").val()
+						}
+				};
+
+				$.ajax({
+						url: "/course/" + courseId + "/class",
+						type: "POST",
+						contentType: "application/json",
+						data: JSON.stringify(classInfo),
+						success: function (data) {
+							alert("班级创建成功!");
+							window.location.href="teacherCourseHomePage.html";
+						}
+				});
+				*/
+
+			});
+			
+			//在修改班级页面点击重置按钮，显示班级信息页面
+			$("#resetModifyClass").click(function(){
+				$("input[type='text']").val("");
+			});
+			
+					
+			//在创建讨论课页面点击提交按钮，跳转到老师课程内首页
+			$("#submitNewSeminar").click(function(){
+			    /*
+				var type = $("#createSeminarPage").find("option:selected").text();
+				var groupType;
+				if (type == "固定分组") {
+						groupType = "fixed";
+				} 
+				else {
+						groupType = "random";
+				}
+					
+				var seminarInfo = {
+						name: $("#createSeminarPage").find("input[name=seminarName]").val(),
+						description: $("#createSeminarPage").find("#areaSeminar").val(),
+						groupingMethod: groupType,
+						startTime: $("#createSeminarPage").find("input[name=begintime]").val(),
+						endTime: $("#createSeminarPage").find("input[name=endtime]").val(),
+						proportions:{
+							report: $("#createSeminarPage").find("input[name=reportGrade]").val(),
+							presentation: $("#createSeminarPage").find("input[name=seminarGrade]").val(),
+							c: $("#createSeminarPage").find("input[name=c]").val(),
+							b: $("#createSeminarPage").find("input[name=b]").val(),
+							a: $("#createSeminarPage").find("input[name=a]").val()
+						}
+				}
+
+				$.ajax({
+						url: "/course/" + courseId + "/seminar",
+						type: "POST",
+						contentType: "application/json",
+						data: JSON.stringify(seminarInfo),
+						success: function (data) {
+							alert("创建讨论课成功!");
+							window.location.href = "teacherCourseHomePage.html";
+						}
+				});
+				*/
+			    var r=confirm("是否确认提交？");
+			    if(r){
+                    buttonId=this.id;
+                    window.location.href='teacherCourseHomePage.html?' + buttonId;
+				}
+
+			});
+			
+			//在创建讨论课页面点击重置按钮，显示创建讨论课信息页面
+			$("#resetNewSeminar").click(function(){
+				$("input[type='text']").val("");
+				$("#areaSeminar").val("");
+			});
+			
+			//在讨论课页面点击评分按钮，显示评分页面
+			$("#giveScore").click(function(){
+                $("#newSeminarPage").hide();
+                $("#giveScorePage").show();
+				var seminarId = localStorage.getItem("seminarId");
+				seminarId= 1;
+
+				//获取所有小组信息
+				$.ajax({	
+					url:"/seminar/"+seminarId+"/group",
+					type: "GET",
+                    dataType: "json",
+					success: function (data) {
+						
+						var $table=$("#giveScorePage").find(".tableContent");
+						if (data.group.length != undefined) {
+							for (var i = 0; i < data.group.length; i++) {
+								var $tr=$("<tr></tr>");
+								$tr.appendTo($table);
+								var $td=$("<td>" + data[i].id+"</td>");
+								$td.appendTo($tr);
+								var $td=$("<td>data[i].name</td>");
+								$td.appendTo($tr);	
+								var $td=$("<td>xxx</td>");
+								$td.appendTo($tr);
+								var $td=$("<td>5</td>");
+								$td.appendTo($tr);
+								var $td=$("<td>已提交</td>");
+								$td.appendTo($tr);
+								var $td=$("<td>5</td>");
+								$td.appendTo($tr);
+								var $td=$("<td>5</td>");
+								$td.appendTo($tr);
+								
+								var $td=$("<td></td>");
+								var $img1=$("<img></img>");
+								$img1.attr("src","./image/view.png");
+								$img1.attr("id","viewReport");
+								$img1.attr("alt","预览");
+								$img1.appendTo($td);
+								
+								var $img2=$("<img></img>");
+								$img2.attr("src","./image/download.png");
+								$img2.attr("id","viewReport");
+								$img2.attr("alt","下载");
+								$img2.appendTo($td);
+								$td.appendTo($tr);
+							}
+						}
+					}
+				})
+
+			});
+			
+			//在讨论课页面点击修改按钮，显示修改讨论课页面
+			$("#modifySeminar").click(function(data){
+
+                $("#newSeminarPage").hide();
+                $("#modifySeminarPage").show();
+
+                /*
+                    $("#modifySeminarPage").find("input.middleInput").eq(0).val(data.name);
+                    $("#modifySeminarPage").find("textarea.middleInput").eq(0).val(data.description);
+                    $("#groupingMethod").val((seminarJson.groupingMethod == "fixed" ? 0 : 1));
+                    $("#modifySeminarPage").find("input.timeStyle").eq(0).val(data.startTime);
+                    $("#modifySeminarPage").find("input.timeStyle").eq(1).val(data.endTime);
+
+                    $("#modifySeminarPage").find("input.smallInput").eq(0).val(data.proportion.report);
+                    $("#modifySeminarPage").find("input.smallInput").eq(1).val(data.proportion.presentation);
+                    $("#modifySeminarPage").find("input.smallInput").eq(2).val(data.proportion.a);
+                    $("#modifySeminarPage").find("input.smallInput").eq(3).val(data.proportion.b);
+                    $("#modifySeminarPage").find("input.smallInput").eq(4).val(data.proportion.c);
+                    */
+
+			});
+
+			//在讨论课页面点击删除讨论课，显示老师课程内页主页
+			$("#deleteSeminar").click(function(){
+				/*
+				$.ajax({
+						url: "/seminar/" + seminarId,
+						type: "DELETE",
+						contentType: "application/json",
+						dataType: "json",
+						success: function (data) {
+							alert("班级删除成功!");
+							window.location.href="teacherCourseHomePage.html";
+						}
+				});
+				*/
+				var r=confirm("是否确认删除");
+				if(r){
+                    window.location.href="teacherCourseHomePage.html";
+				}
+
+			});
+			
+			//在讨论课页面点击添加topic按钮，显示创建topic页面
+			$("#addTopic").click(function(){
+				$("#newSeminarPage").hide();
+				$("#createTopicPage").show();
+			});
+			
+			//在修改讨论课页面点击提交按钮，显示讨论课页面
+			$("#submitModifySeminar").click(function(){
+			    /*
+				var type = $("#createSeminarPage").find("option:selected").text();
+				var groupType;
+				if (type == "固定分组") {
+						groupType = "fixed";
+				} 
+				else {
+						groupType = "random";
+				}
+					
+				var seminarInfo = {
+						name: $("#createSeminarPage").find("input[name=seminarName]").val(),
+						description: $("#createSeminarPage").find("#areaSeminar").val(),
+						groupingMethod: groupType,
+						startTime: $("#createSeminarPage").find("input[name=begintime]").val(),
+						endTime: $("#createSeminarPage").find("input[name=endtime]").val(),
+						proportions:{
+							report: $("#createSeminarPage").find("input[name=reportGrade]").val(),
+							presentation: $("#createSeminarPage").find("input[name=seminarGrade]").val(),
+							c: $("#createSeminarPage").find("input[name=c]").val(),
+							b: $("#createSeminarPage").find("input[name=b]").val(),
+							a: $("#createSeminarPage").find("input[name=a]").val()
+						}
+				}
+
+				$.ajax({
+						url: "/course/" + courseId + "/seminar",
+						type: "POST",
+						dataType:json,
+						success: function (data) {
+							alert("创建讨论课成功!");
+							window.location.href = "teacherCourseHomePage.html";
+						}
+				});
+				*/
+			    var r=confirm("是否确认删除");
+			    if(r){
+                    $("#modifySeminarPage").hide();
+                    $("#newSeminarPage").show();
+				}
+
+			});
+			
+			
+			//在修改讨论课页面点击重置按钮，清空页面信息继续显示修改讨论课页面
+			$("#resetModifySeminar").click(function(){
+				
+				$("input[type='text']").val("");
+				$("#modifySeminarArea").val("");
+			});
+			
+			
+			//在创建topic页面点击提交按钮，显示讨论课页面
+			$("#submitNewTopic").click(function(){
+				/*var seminarId = localStorage.getItem("seminarId");
+				$(".submit").click(function () {
+					var topicInfo = {
+						serial: $("#createTopicPage").find("input[name=serial]").val(),
+						name: $("#createTopicPage").find("input[name=topic]").val(),
+						description: $("#createTopicPage").find("#topicArea").val(),
+						groupLimit: $("#createTopicPage").find("#groups").val(),
+						groupMemberLimit:$("#createTopicPage").find("input[name=members]").val()
+					}
+					
+					$.ajax({
+						url:"/seminar/" + seminarId + "/topic",
+						type:"POST",
+						contentType: "application/json",
+						data: JSON.stringify(topicInfo),
+						success:function () {
+							alert("添加topic成功");
+							$("#createTopicPage").hide();
+							$("#newSeminarPage").show();
+						}
+					});
+				});
+				*/
+				var r=confirm("是否确认提交？");
+				if(r){
+                    $("#createTopicPage").hide();
+                    $("#newSeminarPage").show();
+				}
+
+			});
+			
+			//在创建topic页面点击重置按钮，清空页面信息继续显示创建topic页面
+			$("#resetNewTopic").click(function(){
+				$("input[type='text']").val("");
+				$("#topicArea").val("");
+			});
+			
+			//在查看topic页面点击修改按钮，显示修改topic页面
+			$("#modifyTopic").click(function(data){
+					/*$("#modifyTopicPage").find("input.middleInput").eq(0).val(data.serial);
+					$("#modifyTopicPage").find("input.bigInput").eq(0).val(data.name);
+					$("#modifyTopicPage").find("textarea.textStyle").eq(0).val(data.description);
+					$("#modifyTopicPage").find("input.middleInput").eq(1).val(data.groupLimit);
+					$("#modifyTopicPage").find("input.middleInput").eq(2).val(data.groupMemberLimit);
+					*/
+				$("#checkTopicBeforeClassPage").hide();
+				$("#modifyTopicPage").show();
+			});
+			
+			//在查看topic页面点击删除按钮，显示查看topic页面
+			$("#deleteTopic").click(function(){
+			    /*
+				$.ajax({
+						url: "/topic/" + topicId,
+						type: "DELETE",
+						contentType: "application/json",
+						data: JSON.stringify(classInfo),
+						success: function (data) {
+							alert("班级删除成功!");
+							window.location.href="teacherCourseHomePage.html";
+						}
+				});
+				*/
+			    var r=confirm("是否确认删除？");
+			    if(r){
+                    $("#checkTopicBeforeClassPage").hide();
+                    $("#newSeminarPage").show();
+				}
+
+			});
+			
+			//在修改topic页面点击提交按钮，显示查看topic页面
+			$("#submitModifyTopic").click(function(){
+
+				var seminarId = localStorage.getItem("seminarId");
+				$(".submit").click(function () {
+				    var r=confirm("是否确认提交？");
+				    if(r){
+                        $("#modifyTopicPage").hide();
+                        $("#checkTopicBeforeClassPage").show();
+					}
+
+				    /*
+					var topicInfo = {
+						serial: $("#createTopicPage").find("input[name=serial]").val(),
+						name: $("#createTopicPage").find("input[name=topic]").val(),
+						description: $("#createTopicPage").find("#topicArea").val(),
+						groupLimit: $("#createTopicPage").find("#groups").val(),
+						groupMemberLimit:$("#createTopicPage").find("input[name=members]").val()
+					}
+					
+					$.ajax({
+						url:"/seminar/" + seminarId + "/topic",
+						type:"POST",
+						contentType: "application/json",
+						data: JSON.stringify(topicInfo),
+						success:function () {
+							alert("添加topic成功");
+							$("#createTopicPage").hide();
+							$("#newSeminarPage").show();
+						}
+					});*/
+				});
+
+			});
+			
+			//在修改topic页面点击重置按钮，清空页面信息继续显示修改topic页面
+			$("#resetModifyTopic").click(function(){
+				$("input[type='text']").val("");
+				$("#modifyTopicArea").val("");
+			});
+			
+			//点击查看报告，跳转显示学生报告页面
+			$("#viewReport").click(function(){
+				window.location.href="teacherScoreReportPage.html";
+			});
+			
+			//点击讨论课中的topic时跳转到显示topic页面
+			$(".topicBlockFont").click(function(){
+				$("#newSeminarPage").hide();
+				var time=true;
+				if(time == true)
+					$("#checkTopicBeforeClassPage").show();
+				else
+					$("#checkTopicAfterClassPage").show();
+			});
+			
+			//在讨论课信息页面点击topic
+			$(document).on('click',".topicBlockFont",function(data){
+				
+				var topicId = localStorage.getItem("topicId");
+				topicId = 1;
+					$("#modifyTopicPage").find("input.middleInput").eq(0).val(data.serial);
+					$("#modifyTopicPage").find("input.bigInput").eq(0).val(data.name);
+					$("#modifyTopicPage").find("textarea.textStyle").eq(0).val(data.description);
+					$("#modifyTopicPage").find("input.middleInput").eq(1).val(data.groupLimit);
+					$("#modifyTopicPage").find("input.middleInput").eq(2).val(data.groupMemberLimit);
+				$("#newSeminarPage").hide();
+				$("#checkTopicBeforeClassPage").show();
+			});
+			
+			//对每一个返回上一页处理
+			$(".returnButton").click(function(){
+				var para = this.parentNode.parentNode.id;
+				if(para == 'createClassPage'||para == 'createSeminarPage'){
+					window.location.href="teacherCourseHomePage.html";window.location.href="teacherCourseHomePage.html";
+				}
+				
+				else if(para == 'checkClassPage'){
+                    window.location.href="teacherCourseHomePage.html";
+				}
+				
+				else if(para == 'modifyClassPage'){
+					$("#modifyClassPage").hide();
+					$("#checkClassPage").show();
+				}
+				
+				else if(para == 'newSeminarPage'){
+                    window.location.href="teacherCourseHomePage.html";
+				}
+				
+				else if(para == 'modifySeminarPage'){
+					$("#modifySeminarPage").hide();
+					$("#newSeminarPage").show();
+				}
+				
+				
+				else if(para == 'giveScorePage'){
+					$("#giveScorePage").hide();
+					$("#newSeminarPage").show();
+				}
+				
+				else if(para == 'createTopicPage'){
+					$("#createTopicPage").hide();
+					$("#newSeminarPage").show();
+				}
+				
+				else if(para == 'checkTopicBeforeClassPage'){
+					$("#checkTopicBeforeClassPage").hide();
+					$("#createTopicPage").show();
+				}
+				
+				else if(para == 'checkTopicAfterClassPage'){
+					$("#checkTopicAfterClassPage").hide();
+					$("#newSeminarPage").show();
+				}
+				
+				else if(para == 'modifyTopicPage'){
+					$("#modifyTopicPage").hide();
+					$("#checkTopicBeforeClassPage").show();
+				}
+				
+				
+				
+			});
+
+			
+			
+			//修改班级信息
+			$("#modifyClassPage").find("input.bigInput").eq(0).val("周三3-4节");
+			$("#modifyClassPage").find("input.bigInput").eq(1).val("海韵201");
+			$("#modifyClassPage").find("input.smallInput").eq(0).val("60");
+			$("#modifyClassPage").find("input.smallInput").eq(1).val("40");
+			$("#modifyClassPage").find("input.smallInput").eq(2).val("30");
+			$("#modifyClassPage").find("input.smallInput").eq(3).val("60");
+			$("#modifyClassPage").find("input.smallInput").eq(4).val("10");
+			
+			//讨论课信息
+			/*$("#newSeminarPage").find("#seminarTitle").text("讨论课1");
+			$("#newSeminarPage").find("label.itemName").eq(1).text("讨论课1");
+			$("#newSeminarPage").find("label.itemName").eq(3).text("领域模型");
+			$("#newSeminarPage").find("label.itemName").eq(5).text("固定分组");
+			$("#newSeminarPage").find("label.itemName").eq(7).text("11/10/2017");
+			$("#newSeminarPage").find("label.itemName").eq(9).text("17/10/2017");
+				
+				
+			var	 $parentDiv=new Array(2);		
+			var $childDiv=new Array(2);
+			
+			for(var i=0;i<2;i++)
+			{
+				$parentDiv[i]=$("<a></a>");	
+				$parentDiv[i].addClass("topicBlock");		
+				$childDiv[i]=$("<div>TopicA</div>");
+				$childDiv[i].addClass("topicBlockFont");		
+				$childDiv[i].appendTo($parentDiv[i]);
+				$parentDiv[i].prependTo($("#topic").children("div.topicBlockBody"));	
+			}	*/
+			
+			
+			//修改讨论课信息
+			$("#modifySeminarPage").find("input.middleInput").eq(0).val("讨论课1");
+			$("#modifySeminarPage").find("textarea.middleInput").eq(0).val("第一章练习");
+			$("#modifySeminarPage").find("input.timeStyle").eq(0).val("11/10/2017");
+			$("#modifySeminarPage").find("input.timeStyle").eq(1).val("17/10/2017");
+			$("#modifySeminarPage").find("input.smallInput").eq(0).val("60");
+			$("#modifySeminarPage").find("input.smallInput").eq(1).val("40");
+			$("#modifySeminarPage").find("input.smallInput").eq(2).val("30");
+			$("#modifySeminarPage").find("input.smallInput").eq(3).val("60");
+			$("#modifySeminarPage").find("input.smallInput").eq(4).val("10");
+			
+			
+			//讨论课Topic信息
+			$("#checkTopicBeforeClassPage").find("div.content").eq(0).text("模块划分");
+			$("#checkTopicBeforeClassPage").find("div.content").eq(1).text("XXXXXXXX");
+			$("#checkTopicBeforeClassPage").find("div.content").eq(2).text("5");
+			$("#checkTopicBeforeClassPage").find("div.content").eq(3).text("5");
+			
+			var	 $parentDiv=new Array(4);		
+			var $childDiv=new Array(4);
+			
+			/*for(var i=0;i<4;i++)
+			{
+				$parentDiv[i]=$("<p>1-A-1</p>");
+				$parentDiv[i].prependTo($("#checkTopicBeforeClassPage").find("div.content").eq(4));
+
+			}	*/
+			
+			
+			//修改topic
+			$("#modifyTopicPage").find("input.middleInput").eq(0).val("A");
+			$("#modifyTopicPage").find("input.bigInput").eq(0).val("Domain model");
+			$("#modifyTopicPage").find("textarea.textStyle").eq(0).val("Domain model");
+			$("#modifyTopicPage").find("input.middleInput").eq(1).val("6");
+			$("#modifyTopicPage").find("input.middleInput").eq(2).val("60");
+			
+			
+			//评分
+			var $table=$("#giveScorePage").find(".tableContent");
+			for(var i=0;i<4;i++)
+			{
+				var $tr=$("<tr></tr>");
+				$tr.appendTo($table);
+				var $td=$("<td>B</td>");
+				$td.appendTo($tr);
+				var $td=$("<td>Bangalore</td>");
+				$td.appendTo($tr);	
+				var $td=$("<td>xxx</td>");
+				$td.appendTo($tr);
+				var $td=$("<td>5</td>");
+				$td.appendTo($tr);
+				var $td=$("<td>已提交</td>");
+				$td.appendTo($tr);
+				var $td=$("<td>5</td>");
+				$td.appendTo($tr);
+				var $td=$("<td>5</td>");
+				$td.appendTo($tr);
+				
+				var $td=$("<td></td>");
+				var $img1=$("<img></img>");
+				$img1.attr("src","./image/view.png");
+				$img1.attr("id","viewReport");
+				$img1.attr("alt","预览");
+				$img1.appendTo($td);
+				
+				var $img2=$("<img></img>");
+				$img2.attr("src","./image/download.png");
+				$img2.attr("id","viewReport");
+				$img2.attr("alt","预览");
+				$img2.appendTo($td);
+				$td.appendTo($tr);
+			}
+			
+			
+		});
+	</script>
+	
+</head>
+<body>
+    <div style="width: 100%; height: 100%;">
+        <div class="top">
+        	<div class="font">
+        		课堂管理系统
+        	</div>
+        	<div class="icon">
+        		<img src="../image/home.png"><label id="home">首页</label>
+        		<img src="../image/help.png"><label id="help">帮助</label>
+        		<img src="../image/exit.png"><label id="exit">退出</label>
+        	</div>
+        	<div class="clear"></div>
+    	</div>
+        <div class="body">
+            <div class="navigation">
+                <div class="courseName"></div>
+                <div class="line"></div>
+                <div class="courseIntroduction"></div>
+			</div>
+			
+			
+			
+			<!--创建班级-->
+            <div id="createClassPage" class="content" style="display:none">
+                <div class="block">
+                    <div class="title">创建班级</div>
+                    <div class="returnButton">返回上一页</div>
+                    <div class="line"></div>
+                    <div class="itemBody">
+                        <div class="item">
+                          <label class="itemName">班级名称*:</label>
+                          <input type="text" class="bigInput" name="className" value="班级代号">
+                        </div>
+                        <div class="item">
+                          <label class="itemName">上课地点*:</label>
+                          <input type="text" class="bigInput" name="classSite">
+                        </div>
+                        <div class="item">
+                          <label id="classTime" class="itemName">上课时间*:</label>
+                          <select id="week" class="bigSelect">
+						  	<option>单周</option>
+							<option>双周</option>
+							<option>每周</option>
+						  </select>
+                          <select id="day" class="smallSelect">
+						  	<option>周一</option>
+							<option>周二</option>
+							<option>周三</option>
+							<option>周四</option>
+							<option>周五</option>
+						  </select>
+                          <select id="time" class="smallSelect">
+						  	<option>12节</option>
+							<option>34节</option>
+							<option>56节</option>
+							<option>78节</option>
+							<option>910节</option>
+							<option>11节</option>
+						  </select>
+                          <button class="addButton">添加</button>
+                        </div>
+                        <div class="item">
+                          <label class="itemName">评分规则*:</label>
+                          <label class="itemName">讨论课分数占比</label>
+                          <input type="text" class="smallInput" name="seminarGrade" value="0-100">
+                          <label class="itemName">报告分数占比</label>
+                          <input type="text" class="smallInput" name="reportGrade" value="0-100">
+                        </div>
+                        <div class="item" style="margin-left: 25%">
+                          <label class="itemName">5分占比</label>
+                          <input type="text" class="smallInput" name="a" value="0-100">
+                          <label class="itemName">4分占比</label>
+                          <input type="text" class="smallInput" name="b" value="0-100">
+                          <label class="itemName">3分占比</label>
+                          <input type="text" class="smallInput" name="c" value="0-100">
+                        </div>
+                        <div class="item">
+                          <label class="itemName">导入学生名单*:</label> 
+						  <input type="button" class="selectFile" value="上传文件" onClick="path.click()">  
+						  <input type="file" class="selectFile" id="path" style="display:none" onChange="upfile.value=this.value">
+                        </div>
+                        <div class="item">
+                          <button id="submitNewClass" class="submit">提交</button>
+                          <input type="button" id="resetNewClass" class="reset" value="重置">
+                          <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			
+			<!--查看班级信息-->
+			<div id="checkClassPage" class="content" style="display:none">
+                <div class="block">
+                    <div class="title">查看班级</div>
+                    <div class="returnButton">返回上一页</div>
+                    <div class="line"></div>
+                    <div class="itemBody">
+                        <div class="item">
+                          <label class="itemName">班级名称:</label>
+                          <label class="itemName"></label>
+                        </div>
+                        <div class="item">
+                          <label class="itemName">上课地点:</label>
+                          <label class="itemName"></label>
+                        </div>
+                        <div class="item">
+                          <label class="itemName">上课时间:</label>
+                          <label class="itemName"> </label>
+                          <label class="itemName"> </label>
+                        </div>
+                        <div class="item">
+                          <label class="itemName">评分规则:</label>
+                          <label class="itemName" style="display: none">讨论课分数占比</label>
+                          <label class="itemName"></label><br/>
+                          <label class="itemName"> 报告分数占比</label>
+                          <label class="itemName"></label>
+                        </div>
+						<br/><br/><br/>
+                        <div class="item" style="margin-top:2%">
+                          <label class="smallItemName">5分占比</label>
+                          <label class="itemName"></label>
+                          <label class="smallItemName">4分占比</label>
+                          <label class="itemName">       </label>
+                          <label class="smallItemName">3分占比</label>
+                          <label class="itemName">       </label>
+                        </div>
+						
+                        <div class="item">
+                          <label class="itemName">导入学生名单:</label>
+                          <button class="selectFile">下载文件</button>
+                        </div>
+                        <div class="item">
+                          <button id="modifyClass" class="submit">修改</button>
+                          <button id="deleteClass" class="reset">删除班级</button>
+                          <div class="clear"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+			
+			
+			<!--修改班级-->
+			<div id="modifyClassPage" class="content" style="display:none">
+                <div class="block">
+                    <div class="title">修改班级</div>
+                    <div class="returnButton">返回上一页</div>
+                    <div class="line"></div>
+                    <div class="itemBody">
+                        <div class="item">
+                          <label class="itemName">班级名称*:</label>
+                          <input type="text" class="bigInput" name="className">
+                        </div>
+                        <div class="item">
+                          <label class="itemName">上课地点*:</label>
+                          <input type="text" class="bigInput" name="classSite">
+                        </div>
+                        <div class="item">
+                          <label class="itemName">上课时间*:</label>
+                          <select id="week" class="bigSelect">
+						  	<option>单周</option>
+							<option>双周</option>
+							<option>每周</option>
+						  </select>
+                          <select id="day" class="smallSelect">
+						  	<option>周一</option>
+							<option>周二</option>
+							<option>周三</option>
+							<option>周四</option>
+							<option>周五</option>
+						  </select>
+                          <select id="time" class="smallSelect">
+						  	<option>12节</option>
+							<option>34节</option>
+							<option>56节</option>
+							<option>78节</option>
+							<option>910节</option>
+							<option>11节</option>
+						  </select>
+                          <button class="addButton">+</button>
+                        </div>
+                        <div class="item">
+                          <label class="itemName">评分规则*:</label>
+                          <label class="itemName">讨论课分数占比</label>
+                          <input type="text" class="smallInput" name="seminarGrade">
+                          <label class="itemName">报告分数占比</label>
+                          <input type="text" class="smallInput" name="reportGrade">
+                        </div>
+                        <div class="item" style="margin-left: 18%">
+                          <label class="itemName">5分占比</label>
+                          <input type="text" class="smallInput" name="a">
+                          <label class="itemName">4分占比</label>
+                          <input type="text" class="smallInput" name="b">
+                          <label class="itemName">3分占比</label>
+                          <input type="text" class="smallInput" name="c">
+                        </div>
+                       
+						<div class="item">
+                          <label class="itemName">导入学生名单*:</label> 
+						  <input type="button" class="selectFile" value="上传文件" onClick="path.click()">  
+						  <input type="file" class="selectFile" id="path" style="display:none" onChange="upfile.value=this.value">
+                        </div>
+						
+                        <div class="item">
+                          <button id="submitModifyClass" class="submit">提交</button>
+                          <button id="resetModifyClass" class="reset">重置</button>
+                          <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			
+			<!--创建讨论课-->
+			<div id="createSeminarPage" class="content" style="display:none">
+            	<div class="block">
+                    <div class="title">创建讨论课</div>
+                    <div class="returnButton">返回上一页</div>
+                    <div class="line"></div>
+				
+					<div class="itemBody">
+								<form>
+                          			<div class="item">
+                          				<label class="itemName">讨论课名称*：</label>
+                          				<input type="text" class="middleInput" name="seminarName"/><br/>
+                          			</div>
+                          			<div class="item">
+                          				<label class="itemName">讨论课说明*：</label></br>
+          								<textarea id="areaSeminar" class="bigInput" type="textarea" cols="80" rows="5"></textarea>
+          							</div>
+          							<div class="item">
+										<form action="" method="get"> 
+											<label class="itemName">分组方式*：</label>
+												<select class="itemName" name="groupMethod"> 
+													<option class="itemName" value="0">随机分组</option> 
+													<option class="itemName" value="1">固定分组</option> 
+												</select> 
+										</form>
+									</div>
+									<div class="item">
+										<label class="itemName">开始时间*： </label>
+										<input type="date" class="timeStyle" name="begintime"/>
+										<label class="itemName"> 结束时间*： </label>
+										<input type="date" class="timeStyle" name="endtime"/>
+									</div>
+									<div class="item">
+										<label class="itemName">评分规则*：</label>
+										<label class="itemName">讨论课分数占比 </label>
+										<input type="text" class="smallInput" name="seminarGrade"/>
+										<label class="itemName">      </label>
+										<label calss="itemName"> 报告分数占比 </label>
+										<input type="text" class="smallInput" name="reportGrade"/>
+									</div>
+									<div class="item">
+										<label class="itemName">      </label>
+										<label class="itemName">5分占比 </label>
+										<input type="text" class="smallInput" name="a"/>
+										<label class="itemName">4分占比 </label>
+										<input type="text" class="smallInput" name="b"/>
+										<label class="itemName">3分占比 </label>
+										<input type="text" class="smallInput" name="c"/>
+									</div>
+                          		</form>
+                          		<div class="item">
+                          			<button id="submitNewSeminar" class="submit">提交</button>
+                         			<button id="resetNewSeminar" class="reset">重置</button>
+                         		 	<div class="clear"></div>
+                       			</div>
+					</div>
+				</div>
+            </div>
+			
+			<!--查看新讨论课页面-->
+			<div id="newSeminarPage" class="content" style="display:none">
+				<div class="block">
+					<div class="title" id="seminarTitle"></div>
+					<div class="returnButton">返回上一页</div>
+					<div class="line"></div>
+					<div class="itemBody">
+						<div class="item">
+							<label class="itemName">讨论课名称：</label>
+							<label class="itemName"></label>
+						</div>	
+						<div class="item">
+							<label class="itemName">讨论课说明：</label>
+							<label class="itemName"></label>
+						</div>
+						<br/><br/>
+						<div class="item">
+							<label class="itemName">分组方式：</label>
+							<label class="itemName"></label>
+						</div>
+						<div class="item">
+							<label class="itemName">开始时间：</label>
+							<label class="itemName"></label>
+						</div>
+						<div class="item">
+							<label class="itemName">结束时间：</label>
+							<label class="itemName"></label>
+						</div>
+						<div id="score" class="item">
+							<button id="giveScore" class="leftButton">评分</button>
+							<button id="modifySeminar" class="middleButton">修改</button>
+							<button id="deleteSeminar" class="rightButton">删除讨论课</button>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</div>
+			
+				<div id="topic" class="block">
+					<div class="title">Topic</div>
+					<div class="line"></div>
+					<div class="topicBlockBody">
+					  <div class="topicBlock"><img src="../image/smalladd.png" id="addTopic" class="addImg"/></div>
+					</div>
+				</div>
+			</div>
+			
+			
+			<!--修改讨论课-->
+			<div id="modifySeminarPage" class="content" style="display:none">
+            	<div class="block">
+                    <div class="title">修改讨论课</div>
+                    <div class="returnButton">返回上一页</div>
+                    <div class="line"></div>
+				
+					<div class="itemBody">
+								<form>
+                          			<div class="item">
+                          				<label class="itemName">讨论课名称*：</label>
+                          				<input type="text" class="middleInput" value="讨论课1"></input><br/>
+                          			</div>
+                          			<div class="item">
+                          				<label class="itemName">讨论课说明*：</label></br>
+          								<textarea id="modifySeminarArea" class="bigInput" type="textarea" cols="80" rows="5">第一章练习</textarea>
+          							</div>
+          							<div class="item">
+										<form action="" method="get"> 
+											<label class="itemName">分组方式*：</label>
+												<select id="groupingMethod" class="itemName" name="groupMethod"> 
+													<option class="itemName" value="0">随机分组</option> 
+													<option class="itemName" value="1">固定分组</option> 
+												</select> 
+										</form>
+									</div>
+									<div class="item">
+										<label class="itemName">开始时间*： </label>
+										<input type="date" name="begintime" class="timeStyle" value="2017-10-11"/>
+										<label class="itemName"> 结束时间*： </label>
+										<input type="date" name="endtime" class="timeStyle" value="2017-10-11"/>
+									</div>
+									<div class="item">
+										<label class="itemName">评分规则*：</label>
+										<label class="itemName">讨论课分数占比 </label>
+										<input type="text" class="smallInput"/>
+										<label class="itemName">      </label>
+										<label class="itemName"> 报告分数占比 </label>
+										<input type="text" class="smallInput"/>
+									</div><br/>
+									<div class="item">
+										<label class="itemName" style="margin-left:16.5%">5分占比 </label>
+										<input type="text" class="smallInput"/>
+										<label class="itemName" style="margin-left:1%">4分占比 </label>
+										<input type="text" class="smallInput"/>
+										<label class="itemName" style="margin-left:1%">3分占比 </label>
+										<input type="text" class="smallInput"/>
+									</div>
+                          		</form>
+                          		<div class="item">
+                          			<button id="submitModifySeminar" class="submit">提交</button>
+                         			<button id="resetModifySeminar" class="reset">重置</button>
+                         		 	<div class="clear"></div>
+                       			</div>
+					</div>
+				</div>
+            </div>
+			
+			<!--评分页面-->
+			<div id="giveScorePage" class="content" style="display:none">
+				<div class="contentBlock">
+					<div class="title">评分</div>
+					<div class="returnButton" >返回上一页</div>
+					<div class="line"></div>
+					<div class="itemBody">
+						<table id="groupTable" class="table table-striped">
+							<thead class="tableTitle">
+							<tr>
+								<th>Topic</th>
+								<th>组名</th>
+								<th>组长</th>
+								<th>课堂讨论得分</th>
+								<th>报告提交情况</th>
+								<th>报告分数</th>
+								<th>总分</th>
+								<th>报告</th>
+							</tr>
+							</thead>
+							<tbody class="tableContent">
+							
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			
+			<!--创建话题页面-->
+			<div id="createTopicPage" class="content" style="display:none">
+				<div class="block">
+					<div class="title">创建话题</div>
+					<div class="returnButton">返回上一页</div>
+					<div class="line"></div>
+					<div class="itemBody">
+						<div class="item">
+							<label class="itemName">编号*：</label>
+							<input class="middleInput" type="text" name="serial"></input>
+						</div>
+						<div class="item">
+							<label class="itemName">题目*：</label>
+							<input class="bigInput" type="text" name="topic"></input>
+						</div>
+						<div class="item" style="height:40%;">
+							<label class="itemName">说明*：</label>
+							<textarea id="topicArea" class="textStyle"></textarea>
+						</div>
+						<div class="item">
+							<label class="itemName">组数限制*：</label>
+							<input class="middleInput" type="text" name="groups"></input>
+						</div>
+						<div class="item">
+							<label class="itemName">组内人数上限*：</label>
+							<input class="middleInput" type="text" name="members"></input>
+						</div>
+						<div class="item">
+							<button id="submitNewTopic" class="submit">提交</button>
+							<button id="resetNewTopic" class="reset">重置</button>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!--查看话题(上课之前)-->
+			<div id="checkTopicBeforeClassPage" class="content" style="display:none">
+				<div class="block">
+					<div class="title">查看话题</div>
+					<div class="returnButton">返回上一页</div>
+					<div class="line"></div>
+					<div class="itemBody">
+						<div class="item">
+							<label class="itemName">题目*：</label>
+							<div class="content"></div>
+						</div>
+						<div class="item" style="height:40%;">
+							<label class="itemName">说明*：</label>
+							<div class="content"></div>
+						</div>
+						<div class="item">
+							<label class="itemName">组数限制*：</label>
+							<div class="content"></div>
+						</div>
+						<div class="item">
+							<label class="itemName">组内人数上限*：</label>
+							<div class="content"></div>
+						</div>
+						<div class="item">
+							<label class="itemName">已选小组：</label>
+							<div class="content">
+								<p>
+								</p>
+							</div>
+						</div><br/><br/>
+						<div class="item">
+                          <button id="modifyTopic" class="submit">修 改</button>
+                          <button id="deleteTopic" class="reset">删除话题</button>
+                          <div class="clear"></div>
+                        </div>
+					</div>
+				</div>
+			</div>
+			
+			
+			<!--查看话题（上课之后）-->
+			<div id="checkTopicAfterClassPage" class="content" style="display:none">
+				<div class="block">
+					<div class="title">查看话题</div>
+					<div class="returnButton">返回上一页</div>
+					<div class="line"></div>
+					<div class="itemBody">
+						<div class="item">
+							<label class="itemName">题目*：</label>
+							<div class="content">Domain model与模块划分</div>
+						</div>
+						<div class="item" style="height:40%;">
+							<label class="itemName">说明*：</label>
+							<div class="content">xxxxxx</div>
+						</div>
+						<div class="item">
+							<label class="itemName">组数限制*：</label>
+							<div class="content">5</div>
+						</div>
+						<div class="item">
+							<label class="itemName">组内人数上限*：</label>
+							<div class="content">5</div>
+						</div>
+						<div class="item">
+							<label class="itemName">已选小组：</label>
+							<div class="content">
+								<p>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+			<!--修改话题页面-->
+			<div id="modifyTopicPage" class="content" style="display:none">
+				<div class="block">
+					<div class="title">修改话题</div>
+					<div class="returnButton">返回上一页</div>
+					<div class="line"></div>
+					<div class="itemBody">
+						<div class="item">
+							<label class="itemName">编号*：</label>
+							<input class="middleInput" type="text" name="limitedgroup" value="A"></input>
+						</div>
+						<div class="item">
+							<label class="itemName">题目*：</label>
+							<input class="bigInput" type="text" name="topic"></input>
+						</div>
+						<div class="item" style="height:40%;">
+							<label class="itemName">说明*：</label>
+							<textarea id="modifyTopicArea" class="textStyle"></textarea>
+						</div>
+						<div class="item">
+							<label class="itemName">组数限制*：</label>
+							<input class="middleInput" type="text" name="limitedgroup"input>
+						</div>
+						<div class="item">
+							<label class="itemName">组内人数上限*：</label>
+							<input class="middleInput" type="text" name="limitedgroup"></input>
+						</div>
+						<div class="item">
+							<button id="submitModifyTopic" class="submit">提交</button>
+							<button id="resetModifyTopic" class="reset">重置</button>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			
+            <div class="clear"></div>
+        </div>
+    </div>
+	
+	
+</body>
+</html>

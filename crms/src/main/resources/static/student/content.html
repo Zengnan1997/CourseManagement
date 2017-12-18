@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+	<meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>课堂管理系统</title>
+    <link rel="stylesheet" href="../css/student/content.css">
+	<script src="../js/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+    
+        <div class="top">
+          <div class="font">
+            课堂管理系统
+          </div>
+            <div class="icon">
+                <img src="../image/home.png">首页
+                <img src="../image/help.png">帮助
+                <img src="../image/exit.png">退出
+            </div>
+          <div class="clear"></div>
+        </div>
+        <div class="body">
+            <div class="navigation">
+                <div class="courseName"></div>
+                <div class="line"></div>
+                <div class="courseIntroduction"></div>
+            </div>
+            <div class="content">
+                <div id="viewDiscussion" class="block" style="display:none;">
+                    <div class="title"></div>
+                    <div class="returnButton" style="cursor: pointer;">返回上一页 </div>
+                    <div class="line"></div>
+                    <div class="itemBody">
+                        <div class="item">
+                          <label class="itemName"></label>
+						  <div class="line"></div>
+                        </div>
+                        <div class="item">
+                          <label class="itemName">分组方式：</label>
+						  <br/>
+                          <label class="itemName">开始时间：</label>
+						  <br/>
+						  <label class="itemName">结束时间：</label>	
+						  <label/>						  
+                        </div>
+			    <!--随机分组显示选择话题和组员-->
+					<div id="randomDiscussionAdd" style="display:none;">
+						<div class="item"></div>					
+						<div class="item">
+						  <div class="line"></div>
+						  <div class="item"></div>
+                          <label class="itemName">选择话题：</label>
+						  <br/>
+                          <label class="itemName">组号：</label>
+						  <br/>
+                          <label class="itemName">组长：</label>
+						  <br/>
+                          <label class="itemName">组员：</label>
+                        </div>
+					</div>
+                    </div>
+				</div>
+                <div id="viewTopic"class="block" style="display:none;">              
+					<div class="title"></div>
+                    <div class="returnButton" style="cursor: pointer;">返回上一页</div>
+                    <div class="line"></div>
+                    <div class="itemBody">
+                        <div class="item">
+                          <label class="itemName">题目:</label>
+                          <label class="itemName"/>
+                        </div>
+                        <div class="item">
+                          <label class="itemName">说明:</label>
+                           <label class="itemName"/>
+                        </div>
+                        <div class="item">
+                          <label class="itemName">组数限制:</label>
+                            <label class="itemName"/>
+                        </div>
+                        <div class="item">
+                          <label class="itemName">组内人数上限:</label>
+                            <label class="itemName"/>
+                        </div>
+						<div id="chooseTopic" class="item" style="display:none;">
+						   <div class="modifyButton" style="cursor: pointer;"> 选择话题 </div> 
+						</div>
+					</div>
+                </div>
+				<div id="viewFixedGroup" class="block" style="display:none;">
+                    <div class="title">固定分组</div>
+                    <div class="returnButton" style="cursor: pointer;">返回上一页</div>
+                    <div class="line"></div>
+                    <div class="itemBody">
+                        <div class="item">
+                          <table id="studenttable">
+                            <tr>
+                              <th>角色</th>
+                              <th>学号</th>
+                              <th>姓名</th>
+							  <th>操作</th>
+                            </tr>
+
+                            <tr>
+                              <td>队长</td>
+							  <td></td>
+                              <td></td>
+							  <td></td>
+                            </tr>
+                          </table>
+                        </div>
+						<div id="modifyGroup" class="itemBody" >
+							<div class="modifyButton" style="cursor: pointer;"> 修改 </div>
+						</div>
+					</div>
+                </div>
+				<div id="viewScore" class="block" style="display:none;">
+                    <div class="title">学生成绩</div>
+                    <div class="returnButton" style="cursor: pointer;">返回上一页</div>
+                    <div class="line"></div>
+                    <div class="itemBody">
+                        <div class="item">
+                            <table id="studenttable">
+                            </table>
+                        </div>
+					</div>
+                </div>							
+				<div id="addMembers" class="block" style="display:none;">
+					    <div class="title">添加队员</div>
+						<div class="line"></div>
+						<div class="itemBody">
+						  <div class="item">
+                            <label class="itemName">学号：</label>
+							<input type="text"/>
+							<label class="itemName">姓名：</label>
+							<input type="text"/>
+							 <div class="returnButton" style="cursor: pointer;">查询</div>
+                          </div>
+						  <div class="item">
+						  <table id="studenttable" style="display:none;">
+							<tr>
+                              <th>学号</th>
+                              <th>姓名</th>
+							  <th>操作</th>
+                            </tr>
+						  </table>
+						  </div>
+						</div>
+                 </div>				
+				<div id="topicAndReportAndScore" class="block" style="display:none;">
+                    <div class="title">话题</div>
+                    <div class="line"></div>
+					<div class="blockBody"></div>
+                    <div class="item">
+                        <button class="uploadbutton" style="cursor: pointer;">上传报告</button>
+				    </div>
+					<div class="item">
+                        <button class="viewscorebutton" style="cursor: pointer;">查看分数</button>
+                        <div class="clear"></div>
+                    </div>          
+				</div>
+            </div>
+            <div class="clear"></div>
+        </div>
+		
+	<script>
+		$(function()
+	{
+	    $.ajax({
+            	type:"GET",
+            	url:"/course/1",
+            	async: false,
+            	dataType:"json",
+            	success:function(data){
+            		$(".courseName").text(data.name);
+		            $(".courseIntroduction").text(data.description);
+            		}
+            	});
+//初始页面为空(style="display:none;)
+		
+//判断进入该界面的请求
+		function getUrlParam(name) {
+                //构造一个含有目标参数的正则表达式对象
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                //匹配目标参数 
+                var r = window.location.search.substr(1).match(reg);  
+                //返回参数值
+                if (r != null) return unescape(r[2]); return null;
+            }	
+        var urlData = getUrlParam('data');	
+	//点击讨论课1进入该页面
+		if(urlData == 0)
+		{
+			$("#viewDiscussion").show();
+			$("#topicAndReportAndScore").show();
+			$("#viewDiscussion").children("div.title").text("讨论课1");
+
+            $.ajax({
+            	type:"GET",
+            	url:"/seminar/1",
+            	async: false,
+            	dataType:"json",
+            	success:function(data){
+            	    $("#viewDiscussion").find("label.itemName").eq(0).text(data.description);
+            		$("#viewDiscussion").find("label.itemName").eq(1).append("随机分组");
+            		$("#viewDiscussion").find("label.itemName").eq(2).append(data.startTime);
+            		$("#viewDiscussion").find("label.itemName").eq(3).append(data.endTime);
+            		}
+            	});
+
+		//随机分组
+			$("#randomDiscussionAdd").show();
+            $.ajax({
+            	type:"GET",
+            	url:"/seminar/1/group/my",
+            	async: false,
+            	dataType:"json",
+            	success:function(data){
+            	    $("#randomDiscussionAdd").find("label.itemName").eq(0).append(data.topics[0].serial);
+	                $("#randomDiscussionAdd").find("label.itemName").eq(1).append(data.name);
+			        $("#randomDiscussionAdd").find("label.itemName").eq(2).append(data.leader.name);
+			       	var members=new Array(data.members[0].name,data.members[1].name);
+			        $("#randomDiscussionAdd").find("label.itemName").eq(3).append(members[0]+"  ",members[1]);
+            		}
+            	});
+
+		//话题
+			var $parentDiv=new Array(3);		
+			var $childDiv=new Array(3);
+			$parentDiv[0]=$("<div></div>");	
+			$parentDiv[0].addClass("smallblock");		
+			$childDiv[0]=$("<div>Topic A</div>");
+			$childDiv[0].attr("id","R");
+			$childDiv[0].addClass("blockFont");	
+			$childDiv[0].css("cursor","pointer");			
+			$childDiv[0].appendTo($parentDiv[0]);
+			$parentDiv[0].appendTo($("#topicAndReportAndScore").children("div.blockBody"));	
+
+			$parentDiv[1]=$("<div></div>");	
+			$parentDiv[1].addClass("smallblock");
+			$childDiv[1]=$("<div>Topic B</div>");
+			$childDiv[1].attr("id","R");
+			$childDiv[1].addClass("blockFont");
+			$childDiv[1].css("cursor","pointer");			
+			$childDiv[1].appendTo($parentDiv[1]);
+			$parentDiv[1].appendTo($("#topicAndReportAndScore").children("div.blockBody"));		
+		
+			$parentDiv[2]=$("<div></div>");	
+			$parentDiv[2].addClass("smallblock");		
+			$childDiv[2]=$("<div>Topic C</div>");
+			$childDiv[2].attr("id","R");
+			$childDiv[2].addClass("blockFont");	
+			$childDiv[2].css("cursor","pointer");			
+			$childDiv[2].appendTo($parentDiv[2]);
+			$parentDiv[2].appendTo($("#topicAndReportAndScore").children("div.blockBody"));		
+		//点击返回上一页
+		$("#viewDiscussion").find(".returnButton").click(function()
+		{
+			window.location.href="courseHomePage.html";			
+		});
+		//点击讨论课的话题
+		$childDiv[0].click(function()
+		{
+			$("#viewDiscussion").hide();
+			$("#topicAndReportAndScore").hide();
+			$("#viewTopic").show();
+
+            $.ajax({
+            	type:"GET",
+            	url:"/topic/1",
+            	async: false,
+            	dataType:"json",
+            	success:function(data){
+			    $("#viewTopic").children("div.title").text(data.serial);
+			    $("#viewTopic").find("label.itemName").eq(1).text(data.name);
+			    $("#viewTopic").find("label.itemName").eq(3).text(data.description);
+			    $("#viewTopic").find("label.itemName").eq(5).text(data.groupLimit);
+			    $("#viewTopic").find("label.itemName").eq(7).text(data.groupMemberLimit);
+            		}
+            	});
+
+			//点击返回上一页
+			$("#viewTopic").find(".returnButton").click(function()
+			{
+				$("#viewTopic").hide();
+				$("#viewDiscussion").show();
+				$("#topicAndReportAndScore").show();				
+			});
+		//随机分组不可选话题				
+		});
+		//点击讨论课的查看分数
+		$(".viewscorebutton").click(function()
+		{
+			$("#viewDiscussion").hide();
+			$("#topicAndReportAndScore").hide();
+			$("#viewScore").show();
+
+            $.ajax({
+            	type:"GET",
+            	url:"/course/1/grade",
+            	async: false,
+            	dataType:"json",
+            	success:function(data){
+            	var $table=$("#viewScore").find("#studenttable");
+            	$table.html("");
+            	$table.append("<tr><th>讨论课</th><th>组名</th><th>组长</th><th>课堂讨论课得分</th><th>报告分数</th><th>总分</th></tr>");
+            	var $tr=new Array(6);
+            	for(var k=0;k<2;k++)
+            	{
+            	    $tr[k]=$("<tr></tr>");
+
+            	    var $td=new Array(6);
+    			    $td[0]=$("<td>1</td>");
+			        $td[0].appendTo($tr[k]);
+			        $td[1]=$("<td>"+data[k].groupName+"</td>");
+			        $td[1].appendTo($tr[k]);
+			        $td[2]=$("<td>"+data[k].leaderName+"</td>");
+			        $td[2].appendTo($tr[k]);
+			        $td[3]=$("<td>"+data[k].presentationGrade+"</td>");
+			        $td[3].appendTo($tr[k]);
+			        $td[4]=$("<td>"+data[k].reportGrade+"</td>");
+			        $td[4].appendTo($tr[k]);
+			        $td[5]=$("<td>"+data[k].grade+"</td>");
+			        $td[5].appendTo($tr[k]);
+            	}
+            	 for(var k=0;k<2;k++)
+            	 {
+            	        $tr[k].appendTo($table);
+            	 }
+            		}
+            	});
+			//点击返回上一页
+			$("#viewScore").find(".returnButton").click(function()
+			{
+				$("#viewScore").hide();
+				$("#viewDiscussion").show();
+				$("#topicAndReportAndScore").show();				
+			});
+    });	
+		}	
+	//点击讨论课2进入该页面
+		else if(urlData == 1)
+		{		
+			$("#viewDiscussion").show();
+			$("#topicAndReportAndScore").show();
+			$("#viewDiscussion").children("div.title").text("讨论课2");
+
+            $.ajax({
+            	type:"GET",
+            	url:"/seminar/2",
+            	async: false,
+            	dataType:"json",
+            	success:function(data){
+            	    if(data.groupingMethod=="fixed")
+            	        var groupingMethod="固定分组";
+            	    else
+            	        var groupingMethod="随机分组";
+            	    $("#viewDiscussion").find("label.itemName").eq(0).text(data.description);
+            		$("#viewDiscussion").find("label.itemName").eq(1).append(groupingMethod);
+            		$("#viewDiscussion").find("label.itemName").eq(2).append(data.startTime);
+            		$("#viewDiscussion").find("label.itemName").eq(3).append(data.endTime);
+            		}
+            	});
+		//固定分组
+			$("#randomDiscussionAdd").hide();
+		//话题
+			var $parentDiv=new Array(3);		
+			var $childDiv=new Array(3);
+			$parentDiv[0]=$("<div></div>");	
+			$parentDiv[0].addClass("smallblock");		
+			$childDiv[0]=$("<div>话题A</div>");
+			$childDiv[0].attr("id","F");
+			$childDiv[0].addClass("blockFont");	
+			$childDiv[0].css("cursor","pointer");			
+			$childDiv[0].appendTo($parentDiv[0]);
+			$parentDiv[0].appendTo($("#topicAndReportAndScore").children("div.blockBody"));	
+
+			$parentDiv[1]=$("<div></div>");	
+			$parentDiv[1].addClass("smallblock");
+			$childDiv[1]=$("<div>话题B</div>");
+			$childDiv[1].attr("id","F");
+			$childDiv[1].addClass("blockFont");
+			$childDiv[1].css("cursor","pointer");			
+			$childDiv[1].appendTo($parentDiv[1]);
+			$parentDiv[1].appendTo($("#topicAndReportAndScore").children("div.blockBody"));		
+		
+			$parentDiv[2]=$("<div></div>");	
+			$parentDiv[2].addClass("smallblock");		
+			$childDiv[2]=$("<div>话题C</div>");
+			$childDiv[2].attr("id","F");
+			$childDiv[2].addClass("blockFont");	
+			$childDiv[2].css("cursor","pointer");			
+			$childDiv[2].appendTo($parentDiv[2]);
+			$parentDiv[2].appendTo($("#topicAndReportAndScore").children("div.blockBody"));
+
+		//点击返回上一页
+		$("#viewDiscussion").find(".returnButton").click(function()
+		{
+			window.location.href="courseHomePage.html";			
+		});			
+		//点击讨论课的话题
+		$childDiv[0].click(function()
+		{
+			$("#viewDiscussion").hide();
+			$("#topicAndReportAndScore").hide();
+			$("#viewTopic").show();
+            $.ajax({
+            	type:"GET",
+            	url:"/topic/1",
+            	async: false,
+            	dataType:"json",
+            	success:function(data){
+			    $("#viewTopic").children("div.title").text(data.serial);
+			    $("#viewTopic").find("label.itemName").eq(1).text(data.name);
+			    $("#viewTopic").find("label.itemName").eq(3).text(data.description);
+			    $("#viewTopic").find("label.itemName").eq(5).text(data.groupLimit);
+			    $("#viewTopic").find("label.itemName").eq(7).text(data.groupMemberLimit);
+            		}
+            	});
+		//固定分组可选话题
+			$("#chooseTopic").show();
+			$("#chooseTopic").click(function()
+			{
+			      var r=confirm("确认选择该话题吗？");
+			});
+		//点击返回上一页
+			$("#viewTopic").find(".returnButton").click(function()
+			{
+				$("#viewTopic").hide();
+				$("#viewDiscussion").show();
+				$("#topicAndReportAndScore").show();				
+			});
+		});
+		//点击讨论课的查看分数
+		$(".viewscorebutton").click(function()
+		{
+			$("#viewDiscussion").hide();
+			$("#topicAndReportAndScore").hide();
+			$("#viewScore").show();
+
+            $.ajax({
+            	type:"GET",
+            	url:"/course/2/grade",
+            	async: false,
+            	dataType:"json",
+            	success:function(data){
+            	var $table=$("#viewScore").find("#studenttable");
+            	$table.html("");
+            	$table.append("<tr><th>讨论课</th><th>组名</th><th>组长</th><th>课堂讨论课得分</th><th>报告分数</th><th>总分</th></tr>");
+            	var $tr=new Array(6);
+            	for(var k=0;k<2;k++)
+            	{
+            	    $tr[k]=$("<tr></tr>");
+
+            	    var $td=new Array(6);
+    			    $td[0]=$("<td>1</td>");
+			        $td[0].appendTo($tr[k]);
+			        $td[1]=$("<td>"+data[k].groupName+"</td>");
+			        $td[1].appendTo($tr[k]);
+			        $td[2]=$("<td>"+data[k].leaderName+"</td>");
+			        $td[2].appendTo($tr[k]);
+			        $td[3]=$("<td>"+data[k].presentationGrade+"</td>");
+			        $td[3].appendTo($tr[k]);
+			        $td[4]=$("<td>"+data[k].reportGrade+"</td>");
+			        $td[4].appendTo($tr[k]);
+			        $td[5]=$("<td>"+data[k].grade+"</td>");
+			        $td[5].appendTo($tr[k]);
+            	}
+            	 for(var k=0;k<2;k++)
+            	 {
+            	        $tr[k].appendTo($table);
+            	 }
+            		}
+            	});
+
+			//点击返回上一页
+			$("#viewScore").find(".returnButton").click(function()
+			{
+				$("#viewScore").hide();
+				$("#viewDiscussion").show();
+				$("#topicAndReportAndScore").show();				
+			});
+		});
+		}	
+	//点击固定分组进入该页面
+		else if(urlData == "G")
+		{		
+			$("#viewFixedGroup").show();
+            $.ajax({
+            	type:"GET",
+            	url:"/class/1/classgroup",
+            	async: false,
+            	dataType:"json",
+            	success:function(data){
+			    $("#viewFixedGroup").find("#studenttable tr:gt(0)").eq(0).children("td:eq(1)").text(data.leader.number);
+			    $("#viewFixedGroup").find("#studenttable tr:gt(0)").eq(0).children("td:eq(2)").text(data.leader.name);
+			    var length=data.members.length;
+			    var $tr=new Array(6);
+			    for(var k=0;k<length;k++)
+			    {
+			        $tr[k]=$("<tr></tr>");
+
+            	    var $td=new Array(4);
+    			    $td[0]=$("<td>队员</td>");
+			        $td[0].appendTo($tr[k]);
+			        $td[1]=$("<td>"+data.members[k].number+"</td>");
+			        $td[1].appendTo($tr[k]);
+			        $td[2]=$("<td>"+data.members[k].name+"</td>");
+			        $td[2].appendTo($tr[k]);
+			        $td[3]=$("<td></td>");
+			        var $img=$("<img/>");
+			        $img.attr("src","../image/home.png");
+			        $img.css("cursor","pointer");
+			        $img.appendTo($td[3]);
+			        $td[3].appendTo($tr[k]);
+			    }
+                for(var k=0;k<length;k++)
+			    {
+			        $("#viewFixedGroup").find("#studenttable").append($tr[k]);
+			    }
+            	}
+            	});
+
+		//点击返回上一页
+			$("#viewFixedGroup").find(".returnButton").click(function()
+			{
+				window.location.href="courseHomePage.html";					
+			});		
+		//点击固定分组修改小组
+		$("#modifyGroup").find(".modifyButton").click(function()
+		{			
+			$("#modifyGroup").hide();
+			$("#addMembers").show();
+		});
+		//点击固定分组添加队员的查询
+		$("#addMembers").find(".returnButton").click(function()
+		{
+		    $("#addMembers").find("#studenttable").show();
+            $.ajax({
+            	type:"GET",
+            	url:"/class/1/student",
+            	async: false,
+            	dataType:"json",
+            	success:function(data){
+		        var $table=$("#addMembers").find("#studenttable");
+		        $table.html("");
+			    for(var i=0;i<2;i++)
+			    {
+			    var $tr=$("<tr></tr>");
+			    $tr.appendTo($table);
+			    var $td=$("<td>"+data[i].number+"</td>");
+			    $td.appendTo($tr);
+			    var $td=$("<td>"+data[i].name+"</td>");
+			    $td.appendTo($tr);
+			    var $td=$("<td></td>");
+			    var $img=$("<img/>");
+			    $img.attr("src","../image/home.png");
+			    $img.css("cursor","pointer");
+			    $img.appendTo($td);
+			    $td.appendTo($tr);
+			    }
+
+            		}
+            	});
+
+		});
+		}
+    });	
+	</script>
+</body>
+</html>

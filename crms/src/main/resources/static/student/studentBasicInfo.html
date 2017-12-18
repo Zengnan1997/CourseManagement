@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>学生基本信息</title>
+    <script
+            src="https://code.jquery.com/jquery-1.12.4.js"
+            integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
+            crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="../js/studentBasicInfo.js"></script>
+    <script type="text/javascript" src="../js/commonStudent.js"></script>
+    <link href="../css/student/InfoModifyPage.css" rel="stylesheet" type="text/css"/>
+    
+</head>
+<body>
+    	<div class="top">
+        	<div class="font">
+        		课堂管理系统
+        	</div>
+        	<div class="icon">
+                <img src="../image/home.png" id="homePage" style="cursor: pointer;">首页
+                <img src="../image/help.png" id="help" style="cursor: pointer;">帮助
+                <img src="../image/exit.png" id="exit" style="cursor: pointer;">退出
+            </div>
+        	<div class="clear"></div>
+    	</div>
+        <div class="body">
+            <div class="navigation">
+                <div class="title">导航</div>
+                <div class="line"></div>
+                <div class="courseIntroduction">
+                    <a class="guidefont" href="studentBasicInfo.html">基本信息</a> 
+                    <a class="guidefont" href="studentHomePage.html">课程信息</a> 
+                    <a class="guidefont" href="studentSelectCourseBeforeQuery.html">选择课程</a>
+                </div>
+            </div>
+            <div class="content">
+            
+               <div class="title">基本信息</div>
+               <div class="line"></div>
+                <div class="imgarea"><img class="img" src="../image/link.jpg"/></div>
+                
+                 <div class="info">
+        <table class="table">
+        <tr class="itemName">
+        <td >用户名：<span id="UserName"></span></td>
+        <td>姓名：<span id="Name"></span></td>
+        </tr>
+        <tr class="itemName">
+        <td>性别：<span id="Gender"></span></td>
+        <td>学校：<span id="school"></span></td>
+        </tr>
+        <tr class="itemName">
+        <td>所在学院：<span id="college"></span></td>
+        <td>学历：<span id="qualification"></span></td>
+        </tr>
+        <tr class="itemName">
+        <td>E-mail：<span id="E-mail"></span></td>
+        <td>联系方式：<span id="telephone"></span></td>
+        </tr>
+        </table>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div class="button">
+            <button id="modifyButton" style="cursor: pointer;">修改</button>
+        </div>
+        </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+</body>
+
+        
+</html>

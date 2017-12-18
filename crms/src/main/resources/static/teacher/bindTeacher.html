@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+    <meta name="viewport" content="width=device-width,
+                                     initial-scale=1.0,
+                                     maximum-scale=1.0,
+                                     user-scalable=no">
+    <title>ClassManage</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+html
+{
+height:100%;
+margin:0;
+}
+body
+{
+height:100%;
+margin:0; 
+background-image:url(../image/back.png);
+background-repeat:no-repeat;
+background-size:cover;
+}
+.titleBackground{
+background-color:rgba(65,199,219,0.7);
+width:100%;
+height:16%;
+z-index:-1;
+text-align: center;
+margin: 0 auto;
+}
+.title{
+font-style:normal;
+font-family:YouYuan;
+font-size:40px;
+font-weight:blod;
+display:block;
+position:absolute;
+left:40%;top:20px;
+color:white
+}
+.icon{
+width:20%;
+margin-top:-3.5%;
+font-family: YouYuan;
+font-size: 20px;
+text-align: center;
+color: white;
+padding-top: -4%;
+float: right;
+}
+.phoneNum{
+font-family:Arial;
+font-size:20px;
+display:block;
+position:absolute;
+width:90px;height:26px;
+left:40%;top:202px;
+color:black
+}
+.phoneNum input{
+position:absolute;	
+width:130px;height:23px;
+left:70px;top:4px;
+font-size:15px;
+}
+.password{
+font-family:Arial;
+font-size:20px;
+display:block;
+position:absolute;
+width:90px;height:26px;
+left:40%;top:246px;
+color:black
+}
+.password input{
+position:absolute;	
+width:130px;height:23px;
+left:70px;top:6px;
+font-size:15px;
+}
+.name{
+font-family:Arial;
+font-size:20px;
+display:block;
+position:absolute;
+width:90px;height:26px;
+left:40%;top:290px;
+color:black
+}
+.name input{
+position:absolute;	
+width:130px;height:23px;
+left:70px;top:5px;
+font-size:15px;
+}
+.school{
+font-family:Arial;
+font-size:20px;
+display:block;
+position:absolute;
+width:90px;height:26px;
+left:40%;top:329px;
+color:black
+}
+.school input{
+position:absolute;	
+width:130px;height:23px;
+left:70px;top:5px;
+font-size:15px;
+}
+.gender{
+font-family:Arial;
+font-size:20px;
+display:block;
+position:absolute;
+width:90px;height:26px;
+left:40%;top:375px;
+color:black
+}
+.male{
+font-family:Arial;
+font-size:20px;
+display:block;
+position:absolute;
+width:90px;height:26px;
+left:47%;top:375px;
+color:black
+}
+.male input{
+position:absolute;	
+width:80px;height:23px;
+left:-50px;top:1px;
+}
+.female{
+font-family:Arial;
+font-size:20px;
+display:block;
+position:absolute;
+width:90px;height:26px;
+left:52%;top:375px;
+color:black
+}
+.female input{
+position:absolute;	
+width:80px;height:23px;
+left:-50px;top:1px;
+}
+.stuffNum{
+font-family:Arial;
+font-size:20px;
+display:block;
+position:absolute;
+width:90px;height:26px;
+left:40%;top:420px;
+color:black
+}
+.stuffNum input{
+position:absolute;	
+width:190px;height:23px;
+left:70px;top:4px;
+font-size:15px;
+}
+.eMail{
+font-family:Arial;
+font-size:20px;
+display:block;
+position:absolute;
+width:90px;height:26px;
+left:40%;top:465px;
+color:black
+}
+.eMail input{
+position:absolute;	
+width:190px;height:23px;
+left:70px;top:4px;
+font-size:15px;
+}
+.submit{
+position:absolute;
+left:47%;top:535px;
+background-color: white;
+color:black;
+padding:3px 4px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 20px;
+font-family:Arial;
+cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+<div class="titleBackground"></div>
+<div class="title">课程管理系统</div>
+<div class="icon">
+<img src="../image/home.png">首页
+<img src="../image/help.png">帮助
+<img src="../image/exit.png">退出
+</div>
+<div class="phoneNum">手机号:<input type="text" name="phoneNum" id="pn"/></div>
+<div class="password">密码:<input type="password" name="password" id="pa"/></div>
+<div class="name">姓名:<input type="text" name="name" id="na"/></div>
+<div class="school">学校:<input type="text" name="school" id="sc"/></div>
+<div class="gender">性别:</div>
+<div class="male">男<input type="radio" value="男" name="gender" checked="checked"/></div>
+<div class="female">女<input type="radio" value="女" name="gender"/></div>
+<div class="stuffNum">教工号:<input type="text" name="stuffNum" id="sn"/></div>
+<div class="eMail">邮箱:<input type="email" name="eMail" id="em"/></div>
+<div class="submit">提交</div>
+
+<script>
+    $(function(){
+        $(".submit").click(function(){
+            var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/;
+            if($("#pn").val()==""||$("#pa").val()==""||$("#na").val()==""||$("#sc").val()==""||$("#sn").val()==""||$("#em").val()=="")
+                alert("所有都要填哦~~");
+            else {
+                if (!isNaN($("#pn").val())) {
+                    if (!isNaN($("#sn").val())) {
+                        if (reg.test($("#em").val())){
+                            $.ajax({
+                                url: '/me',
+                                type: 'PUT',
+                                success: function(result) {
+                                    alert("提交成功");
+                                }
+                            });
+                        }
+                        else
+                            alert("请输入正确格式的邮箱");
+                    }
+                    else
+                        alert("请输入正确格式的学号");
+                }
+                else
+                    alert("请输入正确格式的电话号码");
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

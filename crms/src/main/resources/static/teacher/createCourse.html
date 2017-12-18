@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>新建课程</title>
+    <script
+        src="https://code.jquery.com/jquery-1.12.4.js"
+        integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
+        crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="../js/commonTeacher.js"></script>
+    <script type="text/javascript" src="../js/createCourse.js"></script>
+    <link href="../css/teacher/TeacherCreateCoursePage.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    	<div class="top">
+        	<div class="font">
+        		课堂管理系统
+        	</div>
+        	<div class="icon">
+            <img src="../image/home.png" id="homePage" style="cursor: pointer;">首页
+            <img src="../image/help.png" id="help" style="cursor: pointer;">帮助
+            <img src="../image/exit.png" id="exit" style="cursor: pointer;">退出
+          </div>
+        	<div class="clear"></div>
+    	</div>
+        <div class="body">
+         <div class="navigation">
+                <div class="title">导航</div>
+                <div class="line"></div>
+                <div class="courseIntroduction">
+                  <a class="guidefont" href="teacherBasicInfo.html">基本信息</a>
+                  <a class="guidefont" href="teacherHomePage.html">课程信息</a>
+                  <a class="guidefont" href="createCourse.html">新建课程</a>
+                </div>
+         </div>
+            <div class="content">
+           
+		  <div class="title">新建课程</div>
+		  <hr class="line"/>
+	     
+        <br/>
+       <div class="form">
+          <div class="itemName" >
+         课程名称*：<input type="text" name="coursename"/>
+         
+         <br/>
+         <br/>
+          开始时间*：<input type="date" name="begintime"/>  结束时间*：<input type="date" name="endtime"/><br/><br/>
+          
+          课程介绍：<br/>
+          <textarea id="multiInput" name="courseinfo" cols="80" rows="5"></textarea><br/>
+          
+         
+          评分规则*： <br/>
+         
+       <div class="scorerule"><p> 讨论课分数占比:<input type="text" name="seminarscore">报告分数占比：<input type="text" name="reportscore"></p>
+      
+       <p>五分占比:<input type="text" name="five">四分占比：<input type="text" name="four">三分占比：<input type="text" name="three"></p>
+         </div>
+         
+         
+        <br/>
+        <div class="buttons">
+          
+          <button class="button" id="submitCourseButton">提交</button>
+          <button class="button" type="reset" id="resetCourseButton">重置</button>
+          <!--<input class="button" type="submit" name="submit"/>
+          <input class="button" type="reset" name="reset"/>-->
+          
+    </div>
+          </div>
+      </div>
+          </div>
+
+		
+            </div>
+            
+           
+            <div class="clear"></div>
+</body>
+</html>

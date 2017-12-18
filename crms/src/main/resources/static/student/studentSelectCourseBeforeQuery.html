@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>学生选择课程（未查询）</title>
+    <script
+            src="https://code.jquery.com/jquery-1.12.4.js"
+            integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="
+            crossorigin="anonymous">
+    </script>
+    <script src="../js/studentSelectCourseBeforeQuery.js"></script>
+    <script src="../js/commonStudent.js"></script>
+    <link href="../css/student/StudentChooseCoursePage.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+	<div class="top">
+        <div class="font">课堂管理系统</div>
+        <div class="icon">
+            <img src="../image/home.png" id="homePage" style="cursor: pointer;">首页
+            <img src="../image/help.png" id="help" style="cursor: pointer;">帮助
+            <img src="../image/exit.png" id="exit" style="cursor: pointer;">退出
+            </div>
+        <div class="clear"></div>
+    </div>
+	<div class="body">
+		<div class="navigation">
+			<div class="title">导航</div>
+			<div class="line"></div>
+			<div class="courseIntroduction">
+				<a class="guidefont" href="studentBasicInfo.html">基本信息</a>
+				<a class="guidefont" href="studentHomePage.html">课程信息</a>
+				<a class="guidefont" href="studentSelectCourseBeforeQuery.html">选择课程</a>
+			</div>
+		</div>
+		<div class="content">
+			<div class="title">选择课程</div>
+ 			<hr class="line"/>
+			<div class="checkcourse">
+				<form class="itemName">
+					<p>课程名称：<input type="text" name="teacher" value=""></p>
+					<p>任课教师：<input type="text" name="course" value="">
+					<input type="submit" class="main_box_right_content button" value="查询" style="cursor: pointer;"></p>
+				</form>
+			</div>
+			<br/>
+			<div class="main_box_right_content" style="border-top:10%">
+				<h3 class="classtitle">OOAD</h3>
+				<button class="ChooseCourseButton" style="cursor: pointer;">选择课程</button>
+				<div  class="classinfo">
+					<span class="itemName">班级：周一1-2节</span>
+					<span class="itemName">课程地点：海韵206</span>
+					
+					<span class="itemName">班级人数：60人</span>
+					<span class="itemName">时间：周一1-2节、周三1-2节</span>
+					
+				</div>
+			</div>
+			
+			<div class="main_box_right_content" style="border-top:10%">
+				<h3 class="classtitle">OOAD</h3>
+				<button style="cursor: pointer;">选择课程</button>
+				<div  class="classinfo">
+					<span class="itemName">班级：周一3-4节</span>
+					<span class="itemName">课程地点：海韵305</span>
+					
+					<span class="itemName">班级人数：60人</span>
+					<span class="itemName">时间：周一3-4节、周三3-4节</span>
+					
+				</div>
+			</div>
+			
+			<div class="main_box_right_content">
+				<h3 class="classtitle">J2EE</h3>
+				<button style="cursor: pointer;">选择课程</button>
+				<div  class="classinfo">
+					<span class="itemName">班级：周三3-4节</span>
+					<span class="itemName">课程地点：海韵104</span>
+					<span class="itemName">班级人数：60人</span>
+					<span class="itemName">时间：周三7-8节、周五3-4节</span>
+				</div>
+			</div>
+			
+			<div class="main_box_right_content">
+				<h3 class="classtitle">软件工程</h3>
+				<button style="cursor: pointer;">选择课程</button>
+				<div  class="classinfo">
+					<span class="itemName">班级：周三3-4节</span>
+					<span class="itemName">课程地点：海韵104</span>
+					
+					<span class="itemName">班级人数：60人</span>
+					<span class="itemName">时间：周三3-4节、周五3-4节</span>
+				</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+
+</body>
+</html>
