@@ -21,7 +21,10 @@ public interface CourseService {
 	 * @exception InfoIllegalException userId格式错误时抛出
 	 * @exception CourseNotFoundException 未找到课程
 	 */
-	 List<Course> listCourseByUserId(BigInteger userId) throws InfoIllegalException,CourseNotFoundException;
+	 List<Course> listCourseByUserId(BigInteger userId) throws InfoIllegalException,CourseNotFoundException
+	 {
+		 
+	 }
 	
 	
 	/**
