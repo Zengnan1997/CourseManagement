@@ -1,4 +1,4 @@
-package xmu.crms.coursemanagesystem.entity;
+package xmu.crms.entity;
 
 import java.math.BigInteger;
 import java.util.Date;
